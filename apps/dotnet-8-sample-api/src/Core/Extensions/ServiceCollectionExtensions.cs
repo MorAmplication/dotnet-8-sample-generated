@@ -1,11 +1,16 @@
-using MyService.APIs;
+using Dotnet_8SampleApiDotNet.APIs;
 
-namespace MyService;
+namespace Dotnet_8SampleApiDotNet;
 
-public static class ServiceCollectionExtensions
+public class ServiceCollectionExtensions
 {
+    /// <summary>
+    /// Add services to the container.
+    /// </summary>
     public static void RegisterServices(this IServiceCollection services)
     {
-        // Add services to the container.
+        services.AddScoped<ITodoItemsService, TodoItemsService>();
+        services.AddScoped<IWorkspacesService, WorkspacesService>();
+        services.AddScoped<IAuthorsService, AuthorsService>();
     }
 }

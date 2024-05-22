@@ -181,14 +181,15 @@ public abstract class WorkspacesServiceBase : IWorkspacesService
         TodoItemFindMany TodoItemFindMany
     )
     {
-        var workspace = await _context.workspaces.FirstAsync(x => x.Id == idDto.Id);
+        var todoItems = await _context
+            .TodoItems.Where(a => a.Workspaces.Any(todoItem => todoItem.Id == idDto.Id))
+            .ApplyWhere(todoItemFindMany.Where)
+            .ApplySkip(todoItemFindMany.Skip)
+            .ApplyTake(todoItemFindMany.Take)
+            .ApplyOrderBy(todoItemFindMany.SortBy)
+            .ToListAsync();
 
-        if (workspace == null)
-        {
-            throw new NotFoundException();
-        }
-
-        return workspace.TodoItems.Select(todoItem => todoItem.ToDto()).ToList();
+        return todoItems.Select(x => x.ToDto());
     }
 
     /// <summary>

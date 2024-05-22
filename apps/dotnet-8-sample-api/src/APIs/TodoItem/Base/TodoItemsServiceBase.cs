@@ -154,14 +154,31 @@ public abstract class TodoItemsServiceBase : ITodoItemsService
         AuthorFindMany AuthorFindMany
     )
     {
-        var todoItem = await _context.todoItems.FirstAsync(x => x.Id == idDto.Id);
+        var authors = await _context
+            .Authors.Where(a => a.TodoItems.Any(author => author.Id == idDto.Id))
+            .ApplyWhere(authorFindMany.Where)
+            .ApplySkip(authorFindMany.Skip)
+            .ApplyTake(authorFindMany.Take)
+            .ApplyOrderBy(authorFindMany.SortBy)
+            .ToListAsync();
 
+        return authors.Select(x => x.ToDto());
+    }
+
+    /// <summary>
+    /// Get a Workspace record for TodoItem
+    /// </summary>
+    public async Task<WorkspaceDto> getWorkspace(TodoItemIdDTO idDto)
+    {
+        var workspace = await _context
+            .Workspaces.Where(todoItem => todoItem.Id == idDto.Id)
+            .Include(todoItem => todoItem.Workspace)
+            .FirstOrDefaultAsync();
         if (todoItem == null)
         {
             throw new NotFoundException();
         }
-
-        return todoItem.Authors.Select(author => author.ToDto()).ToList();
+        return todoItem.Workspace.ToDto();
     }
 
     /// <summary>

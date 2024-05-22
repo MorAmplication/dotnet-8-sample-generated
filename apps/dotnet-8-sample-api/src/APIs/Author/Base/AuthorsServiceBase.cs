@@ -65,14 +65,15 @@ public abstract class AuthorsServiceBase : IAuthorsService
         TodoItemFindMany TodoItemFindMany
     )
     {
-        var author = await _context.authors.FirstAsync(x => x.Id == idDto.Id);
+        var todoItems = await _context
+            .TodoItems.Where(a => a.Authors.Any(todoItem => todoItem.Id == idDto.Id))
+            .ApplyWhere(todoItemFindMany.Where)
+            .ApplySkip(todoItemFindMany.Skip)
+            .ApplyTake(todoItemFindMany.Take)
+            .ApplyOrderBy(todoItemFindMany.SortBy)
+            .ToListAsync();
 
-        if (author == null)
-        {
-            throw new NotFoundException();
-        }
-
-        return author.TodoItems.Select(todoItem => todoItem.ToDto()).ToList();
+        return todoItems.Select(x => x.ToDto());
     }
 
     /// <summary>
