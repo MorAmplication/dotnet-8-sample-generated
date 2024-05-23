@@ -9,7 +9,7 @@ public abstract class AuthorsServiceBase : IAuthorsService
     /// <summary>
     /// Connect multiple TodoItems records to Author
     /// </summary>
-    public async Task connectTodoItems(AuthorIdDTO idDto, TodoItemIdDTO TodoItemId)
+    public async Task ConnectTodoItems(AuthorIdDto idDto, TodoItemIdDto[] todoItemsId)
     {
         var author = await _context
             .Authors.Include(x => x.TodoItems)
@@ -35,7 +35,7 @@ public abstract class AuthorsServiceBase : IAuthorsService
     /// <summary>
     /// Disconnect multiple TodoItems records from Author
     /// </summary>
-    public async Task disconnectTodoItems(AuthorIdDTO idDto, TodoItemIdDTO TodoItemId)
+    public async Task DisconnectTodoItems(AuthorIdDto idDto, TodoItemIdDto[] todoItemsId)
     {
         var author = await _context
             .Authors.Include(x => x.TodoItems)
@@ -60,8 +60,8 @@ public abstract class AuthorsServiceBase : IAuthorsService
     /// <summary>
     /// Find multiple TodoItems records for Author
     /// </summary>
-    public async Task<List<TodoItemDto>> findTodoItems(
-        AuthorIdDTO idDto,
+    public async Task<List<TodoItemDto>> FindTodoItems(
+        AuthorIdDto idDto,
         TodoItemFindMany TodoItemFindMany
     )
     {
@@ -79,7 +79,7 @@ public abstract class AuthorsServiceBase : IAuthorsService
     /// <summary>
     /// Update multiple TodoItems records for Author
     /// </summary>
-    public async Task updateTodoItems(AuthorIdDTO idDto, TodoItemIdDTO TodoItemId)
+    public async Task UpdateTodoItems(AuthorIdDto idDto, TodoItemIdDto[] todoItemsId)
     {
         var author = await _context
             .Authors.Include(t => t.TodoItems)
@@ -106,7 +106,7 @@ public abstract class AuthorsServiceBase : IAuthorsService
     /// <summary>
     /// Create one Author
     /// </summary>
-    public async Task<AuthorDto> createAuthor(AuthorCreateInput inputDto)
+    public async Task<AuthorDto> CreateAuthor(AuthorCreateInput inputDto)
     {
         var model = new Author { Name = createDto.Name, };
         if (createDto.Id != null)
@@ -139,7 +139,7 @@ public abstract class AuthorsServiceBase : IAuthorsService
     /// <summary>
     /// Delete one Author
     /// </summary>
-    public async Task deleteAuthor(AuthorIdDTO inputDto)
+    public async Task DeleteAuthor(AuthorIdDto inputDto)
     {
         var author = await _context.Authors.FindAsync(idDto.Id);
         if (author == null)
@@ -154,7 +154,7 @@ public abstract class AuthorsServiceBase : IAuthorsService
     /// <summary>
     /// Find many Authors
     /// </summary>
-    public async Task<List<AuthorDto>> authors(AuthorFindMany findManyArgs)
+    public async Task<List<AuthorDto>> Authors(AuthorFindMany findManyArgs)
     {
         var authors = await _context
             .Authors.Include(x => x.TodoItems)
@@ -170,7 +170,7 @@ public abstract class AuthorsServiceBase : IAuthorsService
     /// <summary>
     /// Get one Author
     /// </summary>
-    public async Task<AuthorDto> author(AuthorIdDTO idDto)
+    public async Task<AuthorDto> Author(AuthorIdDto idDto)
     {
         var authors = await this.Authors(
             new AuthorFindMany { Where = new AuthorWhereInput { Id = idDto.Id } }
@@ -187,7 +187,7 @@ public abstract class AuthorsServiceBase : IAuthorsService
     /// <summary>
     /// Update one Author
     /// </summary>
-    public async Task updateAuthor(AuthorUpdateInput updateDto)
+    public async Task UpdateAuthor(AuthorUpdateInput updateDto)
     {
         var author = updateDto.ToModel(idDto);
 

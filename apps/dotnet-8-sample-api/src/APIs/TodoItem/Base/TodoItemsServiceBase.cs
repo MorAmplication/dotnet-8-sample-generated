@@ -9,7 +9,7 @@ public abstract class TodoItemsServiceBase : ITodoItemsService
     /// <summary>
     /// Create one TodoItem
     /// </summary>
-    public async Task<TodoItemDto> createTodoItem(TodoItemCreateInput inputDto)
+    public async Task<TodoItemDto> CreateTodoItem(TodoItemCreateInput inputDto)
     {
         var model = new TodoItem { Name = createDto.Name, };
         if (createDto.Id != null)
@@ -49,7 +49,7 @@ public abstract class TodoItemsServiceBase : ITodoItemsService
     /// <summary>
     /// Delete one TodoItem
     /// </summary>
-    public async Task deleteTodoItem(TodoItemIdDTO inputDto)
+    public async Task DeleteTodoItem(TodoItemIdDto inputDto)
     {
         var todoItem = await _context.TodoItems.FindAsync(idDto.Id);
         if (todoItem == null)
@@ -64,7 +64,7 @@ public abstract class TodoItemsServiceBase : ITodoItemsService
     /// <summary>
     /// Find many TodoItems
     /// </summary>
-    public async Task<List<TodoItemDto>> todoItems(TodoItemFindMany findManyArgs)
+    public async Task<List<TodoItemDto>> TodoItems(TodoItemFindMany findManyArgs)
     {
         var todoItems = await _context
             .TodoItems.Include(x => x.Workspaces)
@@ -81,7 +81,7 @@ public abstract class TodoItemsServiceBase : ITodoItemsService
     /// <summary>
     /// Get one TodoItem
     /// </summary>
-    public async Task<TodoItemDto> todoItem(TodoItemIdDTO idDto)
+    public async Task<TodoItemDto> TodoItem(TodoItemIdDto idDto)
     {
         var todoItems = await this.TodoItems(
             new TodoItemFindMany { Where = new TodoItemWhereInput { Id = idDto.Id } }
@@ -98,7 +98,7 @@ public abstract class TodoItemsServiceBase : ITodoItemsService
     /// <summary>
     /// Connect multiple Authors records to TodoItem
     /// </summary>
-    public async Task connectAuthors(TodoItemIdDTO idDto, AuthorIdDTO AuthorId)
+    public async Task ConnectAuthors(TodoItemIdDto idDto, AuthorIdDto[] authorsId)
     {
         var todoItem = await _context
             .TodoItems.Include(x => x.Authors)
@@ -124,7 +124,7 @@ public abstract class TodoItemsServiceBase : ITodoItemsService
     /// <summary>
     /// Disconnect multiple Authors records from TodoItem
     /// </summary>
-    public async Task disconnectAuthors(TodoItemIdDTO idDto, AuthorIdDTO AuthorId)
+    public async Task DisconnectAuthors(TodoItemIdDto idDto, AuthorIdDto[] authorsId)
     {
         var todoItem = await _context
             .TodoItems.Include(x => x.Authors)
@@ -149,8 +149,8 @@ public abstract class TodoItemsServiceBase : ITodoItemsService
     /// <summary>
     /// Find multiple Authors records for TodoItem
     /// </summary>
-    public async Task<List<AuthorDto>> findAuthors(
-        TodoItemIdDTO idDto,
+    public async Task<List<AuthorDto>> FindAuthors(
+        TodoItemIdDto idDto,
         AuthorFindMany AuthorFindMany
     )
     {
@@ -168,7 +168,7 @@ public abstract class TodoItemsServiceBase : ITodoItemsService
     /// <summary>
     /// Get a Workspace record for TodoItem
     /// </summary>
-    public async Task<WorkspaceDto> getWorkspace(TodoItemIdDTO idDto)
+    public async Task<WorkspaceDto> getWorkspace(TodoItemIdDto idDto)
     {
         var workspace = await _context
             .Workspaces.Where(todoItem => todoItem.Id == idDto.Id)
@@ -184,7 +184,7 @@ public abstract class TodoItemsServiceBase : ITodoItemsService
     /// <summary>
     /// Update multiple Authors records for TodoItem
     /// </summary>
-    public async Task updateAuthors(TodoItemIdDTO idDto, AuthorIdDTO AuthorId)
+    public async Task UpdateAuthors(TodoItemIdDto idDto, AuthorIdDto[] authorsId)
     {
         var todoItem = await _context
             .TodoItems.Include(t => t.Authors)
@@ -211,7 +211,7 @@ public abstract class TodoItemsServiceBase : ITodoItemsService
     /// <summary>
     /// Update one TodoItem
     /// </summary>
-    public async Task updateTodoItem(TodoItemUpdateInput updateDto)
+    public async Task UpdateTodoItem(TodoItemUpdateInput updateDto)
     {
         var todoItem = updateDto.ToModel(idDto);
 

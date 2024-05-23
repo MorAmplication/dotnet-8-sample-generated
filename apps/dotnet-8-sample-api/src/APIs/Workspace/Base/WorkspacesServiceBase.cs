@@ -9,7 +9,7 @@ public abstract class WorkspacesServiceBase : IWorkspacesService
     /// <summary>
     /// Create one Workspace
     /// </summary>
-    public async Task<WorkspaceDto> createWorkspace(WorkspaceCreateInput inputDto)
+    public async Task<WorkspaceDto> CreateWorkspace(WorkspaceCreateInput inputDto)
     {
         var model = new Workspace { Name = createDto.Name, };
         if (createDto.Id != null)
@@ -42,7 +42,7 @@ public abstract class WorkspacesServiceBase : IWorkspacesService
     /// <summary>
     /// Delete one Workspace
     /// </summary>
-    public async Task deleteWorkspace(WorkspaceIdDTO inputDto)
+    public async Task DeleteWorkspace(WorkspaceIdDto inputDto)
     {
         var workspace = await _context.Workspaces.FindAsync(idDto.Id);
         if (workspace == null)
@@ -57,7 +57,7 @@ public abstract class WorkspacesServiceBase : IWorkspacesService
     /// <summary>
     /// Find many Workspaces
     /// </summary>
-    public async Task<List<WorkspaceDto>> workspaces(WorkspaceFindMany findManyArgs)
+    public async Task<List<WorkspaceDto>> Workspaces(WorkspaceFindMany findManyArgs)
     {
         var workspaces = await _context
             .Workspaces.Include(x => x.TodoItems)
@@ -73,7 +73,7 @@ public abstract class WorkspacesServiceBase : IWorkspacesService
     /// <summary>
     /// Get one Workspace
     /// </summary>
-    public async Task<WorkspaceDto> workspace(WorkspaceIdDTO idDto)
+    public async Task<WorkspaceDto> Workspace(WorkspaceIdDto idDto)
     {
         var workspaces = await this.Workspaces(
             new WorkspaceFindMany { Where = new WorkspaceWhereInput { Id = idDto.Id } }
@@ -90,7 +90,7 @@ public abstract class WorkspacesServiceBase : IWorkspacesService
     /// <summary>
     /// Update one Workspace
     /// </summary>
-    public async Task updateWorkspace(WorkspaceUpdateInput updateDto)
+    public async Task UpdateWorkspace(WorkspaceUpdateInput updateDto)
     {
         var workspace = updateDto.ToModel(idDto);
 
@@ -125,7 +125,7 @@ public abstract class WorkspacesServiceBase : IWorkspacesService
     /// <summary>
     /// Connect multiple TodoItems records to Workspace
     /// </summary>
-    public async Task connectTodoItems(WorkspaceIdDTO idDto, TodoItemIdDTO TodoItemId)
+    public async Task ConnectTodoItems(WorkspaceIdDto idDto, TodoItemIdDto[] todoItemsId)
     {
         var workspace = await _context
             .Workspaces.Include(x => x.TodoItems)
@@ -151,7 +151,7 @@ public abstract class WorkspacesServiceBase : IWorkspacesService
     /// <summary>
     /// Disconnect multiple TodoItems records from Workspace
     /// </summary>
-    public async Task disconnectTodoItems(WorkspaceIdDTO idDto, TodoItemIdDTO TodoItemId)
+    public async Task DisconnectTodoItems(WorkspaceIdDto idDto, TodoItemIdDto[] todoItemsId)
     {
         var workspace = await _context
             .Workspaces.Include(x => x.TodoItems)
@@ -176,8 +176,8 @@ public abstract class WorkspacesServiceBase : IWorkspacesService
     /// <summary>
     /// Find multiple TodoItems records for Workspace
     /// </summary>
-    public async Task<List<TodoItemDto>> findTodoItems(
-        WorkspaceIdDTO idDto,
+    public async Task<List<TodoItemDto>> FindTodoItems(
+        WorkspaceIdDto idDto,
         TodoItemFindMany TodoItemFindMany
     )
     {
@@ -195,7 +195,7 @@ public abstract class WorkspacesServiceBase : IWorkspacesService
     /// <summary>
     /// Update multiple TodoItems records for Workspace
     /// </summary>
-    public async Task updateTodoItems(WorkspaceIdDTO idDto, TodoItemIdDTO TodoItemId)
+    public async Task UpdateTodoItems(WorkspaceIdDto idDto, TodoItemIdDto[] todoItemsId)
     {
         var workspace = await _context
             .Workspaces.Include(t => t.TodoItems)
