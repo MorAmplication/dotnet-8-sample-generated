@@ -1,5 +1,6 @@
+using Dotnet_8SampleApiDotNet.APIs;
 using Dotnet_8SampleApiDotNet.APIs.Dtos;
-using Microsoft.AspNetCore.Authorization;
+using Dotnet_8SampleApiDotNet.APIs.Errors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dotnet_8SampleApiDotNet.APIs;
@@ -8,13 +9,17 @@ namespace Dotnet_8SampleApiDotNet.APIs;
 [ApiController()]
 public abstract class TodoItemsControllerBase : ControllerBase
 {
-    public TodoItemsControllerBase(ITodoItemsService service) { }
+    protected readonly ITodoItemsService _service;
+
+    public TodoItemsControllerBase(ITodoItemsService service)
+    {
+        _service = service;
+    }
 
     /// <summary>
     /// Create one TodoItem
     /// </summary>
     [HttpPost()]
-    [Authorize(Roles = "admin,user")]
     public async Task<ActionResult<TodoItemDto>> CreateTodoItem(TodoItemCreateInput input)
     {
         var todoItem = await _service.CreateTodoItem(input);
@@ -26,8 +31,7 @@ public abstract class TodoItemsControllerBase : ControllerBase
     /// Delete one TodoItem
     /// </summary>
     [HttpDelete("{Id}")]
-    [Authorize(Roles = "admin,user")]
-    public async Task DeleteTodoItem([FromRoute()] TodoItemIdDto idDto)
+    public async Task<ActionResult> DeleteTodoItem([FromRoute()] TodoItemIdDto idDto)
     {
         try
         {
@@ -45,7 +49,6 @@ public abstract class TodoItemsControllerBase : ControllerBase
     /// Find many TodoItems
     /// </summary>
     [HttpGet()]
-    [Authorize(Roles = "admin,user")]
     public async Task<ActionResult<List<TodoItemDto>>> TodoItems(
         [FromQuery()] TodoItemFindMany filter
     )
@@ -57,7 +60,6 @@ public abstract class TodoItemsControllerBase : ControllerBase
     /// Get one TodoItem
     /// </summary>
     [HttpGet("{Id}")]
-    [Authorize(Roles = "admin,user")]
     public async Task<ActionResult<TodoItemDto>> TodoItem([FromRoute()] TodoItemIdDto idDto)
     {
         try
@@ -74,15 +76,14 @@ public abstract class TodoItemsControllerBase : ControllerBase
     /// Connect multiple Authors records to TodoItem
     /// </summary>
     [HttpPost("{Id}/authors")]
-    [Authorize(Roles = "admin,user")]
-    public async Task ConnectAuthors(
+    public async Task<ActionResult> ConnectAuthors(
         [FromRoute()] TodoItemIdDto idDto,
         [FromQuery()] AuthorIdDto[] authorsId
     )
     {
         try
         {
-            await _service.ConnectAuthors(idDto, authorIds);
+            await _service.ConnectAuthors(idDto, authorsId);
         }
         catch (NotFoundException)
         {
@@ -96,15 +97,14 @@ public abstract class TodoItemsControllerBase : ControllerBase
     /// Disconnect multiple Authors records from TodoItem
     /// </summary>
     [HttpDelete("{Id}/authors")]
-    [Authorize(Roles = "admin,user")]
-    public async Task DisconnectAuthors(
+    public async Task<ActionResult> DisconnectAuthors(
         [FromRoute()] TodoItemIdDto idDto,
         [FromBody()] AuthorIdDto[] authorsId
     )
     {
         try
         {
-            await _service.DisconnectAuthors(idDto, authorIds);
+            await _service.DisconnectAuthors(idDto, authorsId);
         }
         catch (NotFoundException)
         {
@@ -118,8 +118,7 @@ public abstract class TodoItemsControllerBase : ControllerBase
     /// Find multiple Authors records for TodoItem
     /// </summary>
     [HttpGet("{Id}/authors")]
-    [Authorize(Roles = "admin,user")]
-    public async Task<List<AuthorDto>> FindAuthors(
+    public async Task<ActionResult<List<AuthorDto>>> FindAuthors(
         [FromRoute()] TodoItemIdDto idDto,
         [FromQuery()] AuthorFindMany filter
     )
@@ -138,8 +137,9 @@ public abstract class TodoItemsControllerBase : ControllerBase
     /// Get a Workspace record for TodoItem
     /// </summary>
     [HttpGet("{Id}/workspaces")]
-    [Authorize(Roles = "admin,user")]
-    public async Task<List<WorkspaceDto>> GetWorkspace([FromRoute()] TodoItemIdDto idDto)
+    public async Task<ActionResult<List<WorkspaceDto>>> GetWorkspace(
+        [FromRoute()] TodoItemIdDto idDto
+    )
     {
         var workspace = await _service.GetWorkspace(idDto);
         return Ok(workspace);
@@ -149,15 +149,14 @@ public abstract class TodoItemsControllerBase : ControllerBase
     /// Update multiple Authors records for TodoItem
     /// </summary>
     [HttpPatch("{Id}/authors")]
-    [Authorize(Roles = "admin,user")]
-    public async Task UpdateAuthors(
+    public async Task<ActionResult> UpdateAuthors(
         [FromRoute()] TodoItemIdDto idDto,
         [FromBody()] AuthorIdDto[] authorsId
     )
     {
         try
         {
-            await _service.UpdateAuthors(idDto, authorIds);
+            await _service.UpdateAuthors(idDto, authorsId);
         }
         catch (NotFoundException)
         {
@@ -171,10 +170,9 @@ public abstract class TodoItemsControllerBase : ControllerBase
     /// Update one TodoItem
     /// </summary>
     [HttpPatch("{Id}")]
-    [Authorize(Roles = "admin,user")]
-    public async Task UpdateTodoItem(
+    public async Task<ActionResult> UpdateTodoItem(
         [FromRoute()] TodoItemIdDto idDto,
-        [FromQuery()] TodoItemUpdateInput TodoItemUpdateDto
+        [FromQuery()] TodoItemUpdateInput todoItemUpdateDto
     )
     {
         try

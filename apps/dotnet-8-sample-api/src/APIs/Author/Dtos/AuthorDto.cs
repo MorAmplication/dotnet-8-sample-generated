@@ -1,12 +1,12 @@
-namespace Author.APIs.Dtos;
+namespace Dotnet_8SampleApiDotNet.APIs.Dtos;
 
 public class AuthorDto : AuthorIdDto
 {
-    public DateTime createdAt { get; }
+    public DateTime CreatedAt { get; set; }
 
-    public string updatedAt { get; }
+    public string UpdatedAt { get; set; }
 
-    public string? name { get; }
+    public string? Name { get; set; }
 
-    public List<TodoItemDto>? todoItems { get; }
+    public List<TodoItemIdDto>? TodoItems { get; set; }
 }

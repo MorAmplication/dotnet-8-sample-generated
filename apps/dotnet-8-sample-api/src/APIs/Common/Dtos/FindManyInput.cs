@@ -1,6 +1,6 @@
-using MyService.APIs.Common.Attributes;
+using Dotnet_8SampleApiDotNet.APIs.Common.Attributes;
 
-namespace MyService.APIs.Common;
+namespace Dotnet_8SampleApiDotNet.APIs.Common;
 
 public abstract class FindManyInput<M, W> : PaginationInput, IFindManyInput<M, W>
     where W : class

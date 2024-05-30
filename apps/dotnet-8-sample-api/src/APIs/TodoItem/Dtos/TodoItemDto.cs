@@ -1,14 +1,14 @@
-namespace TodoItem.APIs.Dtos;
+namespace Dotnet_8SampleApiDotNet.APIs.Dtos;
 
 public class TodoItemDto : TodoItemIdDto
 {
-    public DateTime createdAt { get; }
+    public DateTime CreatedAt { get; set; }
 
-    public string updatedAt { get; }
+    public string UpdatedAt { get; set; }
 
-    public List<AuthorDto>? authors { get; }
+    public List<AuthorIdDto>? Authors { get; set; }
 
-    public WorkspaceDto? workspace { get; }
+    public WorkspaceIdDto? Workspace { get; set; }
 
-    public bool? isCompleted { get; }
+    public bool? IsCompleted { get; set; }
 }

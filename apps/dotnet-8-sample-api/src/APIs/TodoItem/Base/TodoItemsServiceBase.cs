@@ -1,42 +1,50 @@
+using Dotnet_8SampleApiDotNet.APIs;
+using Dotnet_8SampleApiDotNet.APIs.Common;
 using Dotnet_8SampleApiDotNet.APIs.Dtos;
+using Dotnet_8SampleApiDotNet.APIs.Errors;
+using Dotnet_8SampleApiDotNet.APIs.Extensions;
+using Dotnet_8SampleApiDotNet.Infrastructure;
+using Dotnet_8SampleApiDotNet.Infrastructure.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Dotnet_8SampleApiDotNet.APIs;
 
 public abstract class TodoItemsServiceBase : ITodoItemsService
 {
-    public TodoItemsServiceBase(TodoItemsServiceContext context) { }
+    protected readonly Dotnet_8SampleApiDotNetDbContext _context;
+
+    public TodoItemsServiceBase(Dotnet_8SampleApiDotNetDbContext context)
+    {
+        _context = context;
+    }
 
     /// <summary>
     /// Create one TodoItem
     /// </summary>
-    public async Task<TodoItemDto> CreateTodoItem(TodoItemCreateInput inputDto)
+    public async Task<TodoItemDto> CreateTodoItem(TodoItemCreateInput createDto)
     {
-        var model = new TodoItem { Name = createDto.Name, };
+        var todoItem = new TodoItem
+        {
+            CreatedAt = createDto.CreatedAt,
+            UpdatedAt = createDto.UpdatedAt,
+            IsCompleted = createDto.IsCompleted
+        };
+
         if (createDto.Id != null)
         {
-            model.Id = createDto.Id.Value;
+            todoItem.Id = createDto.Id;
         }
-
-        if (createDto.WorkspaceIds != null)
+        if (createDto.Authors != null)
         {
-            model.Workspaces = await _context
-                .Workspaces.Where(workspace =>
-                    createDto.WorkspaceIds.Select(t => t.Id).Contains(workspace.Id)
-                )
+            todoItem.Authors = await _context
+                .Authors.Where(author => createDto.Authors.Select(t => t.Id).Contains(author.Id))
                 .ToListAsync();
         }
 
-        if (createDto.AuthorIds != null)
-        {
-            model.Authors = await _context
-                .Authors.Where(author => createDto.AuthorIds.Select(t => t.Id).Contains(author.Id))
-                .ToListAsync();
-        }
-
-        _context.TodoItems.Add(model);
+        _context.TodoItems.Add(todoItem);
         await _context.SaveChangesAsync();
 
-        var result = await _context.FindAsync<TodoItem>(model.Id);
+        var result = await _context.FindAsync<TodoItem>(todoItem.Id);
 
         if (result == null)
         {
@@ -49,7 +57,7 @@ public abstract class TodoItemsServiceBase : ITodoItemsService
     /// <summary>
     /// Delete one TodoItem
     /// </summary>
-    public async Task DeleteTodoItem(TodoItemIdDto inputDto)
+    public async Task DeleteTodoItem(TodoItemIdDto idDto)
     {
         var todoItem = await _context.TodoItems.FindAsync(idDto.Id);
         if (todoItem == null)
@@ -67,14 +75,13 @@ public abstract class TodoItemsServiceBase : ITodoItemsService
     public async Task<List<TodoItemDto>> TodoItems(TodoItemFindMany findManyArgs)
     {
         var todoItems = await _context
-            .TodoItems.Include(x => x.Workspaces)
+            .TodoItems.Include(x => x.Workspace)
             .Include(x => x.Authors)
             .ApplyWhere(findManyArgs.Where)
             .ApplySkip(findManyArgs.Skip)
             .ApplyTake(findManyArgs.Take)
             .ApplyOrderBy(findManyArgs.SortBy)
             .ToListAsync();
-
         return todoItems.ConvertAll(todoItem => todoItem.ToDto());
     }
 
@@ -116,8 +123,13 @@ public abstract class TodoItemsServiceBase : ITodoItemsService
             throw new NotFoundException();
         }
 
-        var newauthors = authors.Except(todoItem.authors);
-        todoItem.authors.AddRange(newauthors);
+        var authorsToConnect = authors.Except(todoItem.Authors);
+
+        foreach (var author in authorsToConnect)
+        {
+            todoItem.Authors.Add(author);
+        }
+
         await _context.SaveChangesAsync();
     }
 
@@ -129,7 +141,6 @@ public abstract class TodoItemsServiceBase : ITodoItemsService
         var todoItem = await _context
             .TodoItems.Include(x => x.Authors)
             .FirstOrDefaultAsync(x => x.Id == idDto.Id);
-
         if (todoItem == null)
         {
             throw new NotFoundException();
@@ -141,7 +152,7 @@ public abstract class TodoItemsServiceBase : ITodoItemsService
 
         foreach (var author in authors)
         {
-            todoItem.Authors.Remove(author);
+            todoItem.Authors?.Remove(author);
         }
         await _context.SaveChangesAsync();
     }
@@ -151,27 +162,27 @@ public abstract class TodoItemsServiceBase : ITodoItemsService
     /// </summary>
     public async Task<List<AuthorDto>> FindAuthors(
         TodoItemIdDto idDto,
-        AuthorFindMany AuthorFindMany
+        AuthorFindMany todoItemFindMany
     )
     {
         var authors = await _context
-            .Authors.Where(a => a.TodoItems.Any(author => author.Id == idDto.Id))
-            .ApplyWhere(authorFindMany.Where)
-            .ApplySkip(authorFindMany.Skip)
-            .ApplyTake(authorFindMany.Take)
-            .ApplyOrderBy(authorFindMany.SortBy)
+            .Authors.Where(m => m.TodoItems.Any(x => x.Id == idDto.Id))
+            .ApplyWhere(todoItemFindMany.Where)
+            .ApplySkip(todoItemFindMany.Skip)
+            .ApplyTake(todoItemFindMany.Take)
+            .ApplyOrderBy(todoItemFindMany.SortBy)
             .ToListAsync();
 
-        return authors.Select(x => x.ToDto());
+        return authors.Select(x => x.ToDto()).ToList();
     }
 
     /// <summary>
     /// Get a Workspace record for TodoItem
     /// </summary>
-    public async Task<WorkspaceDto> getWorkspace(TodoItemIdDto idDto)
+    public async Task<WorkspaceDto> GetWorkspace(TodoItemIdDto idDto)
     {
-        var workspace = await _context
-            .Workspaces.Where(todoItem => todoItem.Id == idDto.Id)
+        var todoItem = await _context
+            .TodoItems.Where(todoItem => todoItem.Id == idDto.Id)
             .Include(todoItem => todoItem.Workspace)
             .FirstOrDefaultAsync();
         if (todoItem == null)
@@ -189,14 +200,13 @@ public abstract class TodoItemsServiceBase : ITodoItemsService
         var todoItem = await _context
             .TodoItems.Include(t => t.Authors)
             .FirstOrDefaultAsync(x => x.Id == idDto.Id);
-
         if (todoItem == null)
         {
             throw new NotFoundException();
         }
 
         var authors = await _context
-            .Authors.Where(a => authorIdDtos.Select(x => x.Id).Contains(a.Id))
+            .Authors.Where(a => authorsId.Select(x => x.Id).Contains(a.Id))
             .ToListAsync();
 
         if (authors.Count == 0)
@@ -211,23 +221,14 @@ public abstract class TodoItemsServiceBase : ITodoItemsService
     /// <summary>
     /// Update one TodoItem
     /// </summary>
-    public async Task UpdateTodoItem(TodoItemUpdateInput updateDto)
+    public async Task UpdateTodoItem(TodoItemIdDto idDto, TodoItemUpdateInput updateDto)
     {
         var todoItem = updateDto.ToModel(idDto);
 
-        if (updateDto.WorkspaceIds != null)
-        {
-            todoItem.Workspaces = await _context
-                .Workspaces.Where(workspace =>
-                    updateDto.WorkspaceIds.Select(t => t.Id).Contains(workspace.Id)
-                )
-                .ToListAsync();
-        }
-
-        if (updateDto.AuthorIds != null)
+        if (updateDto.Authors != null)
         {
             todoItem.Authors = await _context
-                .Authors.Where(author => updateDto.AuthorIds.Select(t => t.Id).Contains(author.Id))
+                .Authors.Where(author => updateDto.Authors.Select(t => t.Id).Contains(author.Id))
                 .ToListAsync();
         }
 
@@ -239,7 +240,7 @@ public abstract class TodoItemsServiceBase : ITodoItemsService
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!TodoItemExists(idDto))
+            if (!_context.TodoItems.Any(e => e.Id == todoItem.Id))
             {
                 throw new NotFoundException();
             }

@@ -1,20 +1,23 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Dotnet_8SampleApiDotNet.Infrastructure.Models;
 
 [Table("Authors")]
 public class Author
 {
     [Key()]
-    [required()]
-    public string id { get; }
+    [Required()]
+    public string Id { get; set; }
 
-    [required()]
-    public DateTime createdAt { get; }
+    [Required()]
+    public DateTime CreatedAt { get; set; }
 
-    [required()]
-    public string updatedAt { get; }
+    [Required()]
+    public string UpdatedAt { get; set; }
 
     [StringLength(1000)]
-    public string name { get; }
+    public string? Name { get; set; }
 
-    public List<TodoItem> todoItems { get; } = new List<TodoItem>();
+    public List<TodoItem>? TodoItems { get; set; } = new List<TodoItem>();
 }

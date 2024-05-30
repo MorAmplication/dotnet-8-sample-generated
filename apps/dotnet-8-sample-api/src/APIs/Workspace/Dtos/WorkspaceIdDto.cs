@@ -1,6 +1,6 @@
-namespace Workspace.APIs.Dtos;
+namespace Dotnet_8SampleApiDotNet.APIs.Dtos;
 
 public class WorkspaceIdDto
 {
-    public string id { get; }
+    public string Id { get; set; }
 }

@@ -1,54 +1,54 @@
 using Dotnet_8SampleApiDotNet.APIs.Dtos;
 
-namespace Dotnet_8SampleApiDotNet.APIs.Dtos;
+namespace Dotnet_8SampleApiDotNet.APIs;
 
 public interface IWorkspacesService
 {
     /// <summary>
     /// Create one Workspace
     /// </summary>
-    public Task<WorkspaceDto> CreateWorkspace(WorkspaceCreateInput workspaceDto) { }
+    public Task<WorkspaceDto> CreateWorkspace(WorkspaceCreateInput workspaceDto);
 
     /// <summary>
     /// Delete one Workspace
     /// </summary>
-    public Task DeleteWorkspace(WorkspaceIdDto idDto) { }
+    public Task DeleteWorkspace(WorkspaceIdDto idDto);
 
     /// <summary>
     /// Find many Workspaces
     /// </summary>
-    public Task<List<WorkspaceDto>> Workspaces(WorkspaceFindMany findManyArgs) { }
+    public Task<List<WorkspaceDto>> Workspaces(WorkspaceFindMany findManyArgs);
 
     /// <summary>
     /// Get one Workspace
     /// </summary>
-    public Task Workspace(WorkspaceIdDto idDto) { }
+    public Task<WorkspaceDto> Workspace(WorkspaceIdDto idDto);
 
     /// <summary>
     /// Update one Workspace
     /// </summary>
-    public Task UpdateWorkspace(WorkspaceUpdateInput updateInput) { }
+    public Task UpdateWorkspace(WorkspaceIdDto idDto, WorkspaceUpdateInput updateDto);
 
     /// <summary>
     /// Connect multiple TodoItems records to Workspace
     /// </summary>
-    public Task connectTodoItems(WorkspaceIdDto idDto, WorkspaceIdDto[] WorkspacesId) { }
+    public Task ConnectTodoItems(WorkspaceIdDto idDto, TodoItemIdDto[] todoItemsId);
 
     /// <summary>
     /// Disconnect multiple TodoItems records from Workspace
     /// </summary>
-    public Task disconnectTodoItems(WorkspaceIdDto idDto, WorkspaceIdDto[] WorkspacesId) { }
+    public Task DisconnectTodoItems(WorkspaceIdDto idDto, TodoItemIdDto[] todoItemsId);
 
     /// <summary>
     /// Find multiple TodoItems records for Workspace
     /// </summary>
-    public Task<List<TodoItemDto>> findTodoItems(
+    public Task<List<TodoItemDto>> FindTodoItems(
         WorkspaceIdDto idDto,
         TodoItemFindMany TodoItemFindMany
-    ) { }
+    );
 
     /// <summary>
     /// Update multiple TodoItems records for Workspace
     /// </summary>
-    public Task updateTodoItems(WorkspaceIdDto idDto, WorkspaceIdDto[] WorkspacesId) { }
+    public Task UpdateTodoItems(WorkspaceIdDto idDto, TodoItemIdDto[] todoItemsId);
 }

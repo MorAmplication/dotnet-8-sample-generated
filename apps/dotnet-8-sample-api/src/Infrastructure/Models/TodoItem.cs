@@ -1,24 +1,27 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Dotnet_8SampleApiDotNet.Infrastructure.Models;
 
 [Table("TodoItems")]
 public class TodoItem
 {
     [Key()]
-    [required()]
-    public string id { get; }
+    [Required()]
+    public string Id { get; set; }
 
-    [required()]
-    public DateTime createdAt { get; }
+    [Required()]
+    public DateTime CreatedAt { get; set; }
 
-    [required()]
-    public string updatedAt { get; }
+    [Required()]
+    public string UpdatedAt { get; set; }
 
-    public List<Author> authors { get; } = new List<Author>();
+    public List<Author>? Authors { get; set; } = new List<Author>();
 
-    public Workspace workspaceId { get; }
+    public string WorkspaceId { get; set; }
 
-    [ForeignKey(nameof(workspaceId))]
-    public Workspace workspace { get; } = null;
+    [ForeignKey(nameof(WorkspaceId))]
+    public Workspace? Workspace { get; set; } = null;
 
-    public bool isCompleted { get; }
+    public bool? IsCompleted { get; set; }
 }

@@ -1,6 +1,6 @@
-namespace Author.APIs.Dtos;
+namespace Dotnet_8SampleApiDotNet.APIs.Dtos;
 
 public class AuthorIdDto
 {
-    public string id { get; }
+    public string Id { get; set; }
 }

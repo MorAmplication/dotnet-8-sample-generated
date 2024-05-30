@@ -2,7 +2,7 @@ using Dotnet_8SampleApiDotNet.APIs;
 
 namespace Dotnet_8SampleApiDotNet;
 
-public class ServiceCollectionExtensions
+public static class ServiceCollectionExtensions
 {
     /// <summary>
     /// Add services to the container.
