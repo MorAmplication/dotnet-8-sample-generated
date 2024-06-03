@@ -12,5 +12,6 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ITodoItemsService, TodoItemsService>();
         services.AddScoped<IWorkspacesService, WorkspacesService>();
         services.AddScoped<IAuthorsService, AuthorsService>();
+        services.AddScoped<IUsersService, UsersService>();
     }
 }

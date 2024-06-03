@@ -1,6 +1,7 @@
 using Dotnet_8SampleApiDotNet.APIs;
 using Dotnet_8SampleApiDotNet.APIs.Dtos;
 using Dotnet_8SampleApiDotNet.APIs.Errors;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dotnet_8SampleApiDotNet.APIs;
@@ -20,6 +21,7 @@ public abstract class AuthorsControllerBase : ControllerBase
     /// Connect multiple TodoItems records to Author
     /// </summary>
     [HttpPost("{Id}/todoItems")]
+    [Authorize(Roles = "admin,user")]
     public async Task<ActionResult> ConnectTodoItems(
         [FromRoute()] AuthorIdDto idDto,
         [FromQuery()] TodoItemIdDto[] todoItemsId
@@ -41,6 +43,7 @@ public abstract class AuthorsControllerBase : ControllerBase
     /// Disconnect multiple TodoItems records from Author
     /// </summary>
     [HttpDelete("{Id}/todoItems")]
+    [Authorize(Roles = "admin,user")]
     public async Task<ActionResult> DisconnectTodoItems(
         [FromRoute()] AuthorIdDto idDto,
         [FromBody()] TodoItemIdDto[] todoItemsId
@@ -62,6 +65,7 @@ public abstract class AuthorsControllerBase : ControllerBase
     /// Find multiple TodoItems records for Author
     /// </summary>
     [HttpGet("{Id}/todoItems")]
+    [Authorize(Roles = "admin,user")]
     public async Task<ActionResult<List<TodoItemDto>>> FindTodoItems(
         [FromRoute()] AuthorIdDto idDto,
         [FromQuery()] TodoItemFindMany filter
@@ -81,6 +85,7 @@ public abstract class AuthorsControllerBase : ControllerBase
     /// Update multiple TodoItems records for Author
     /// </summary>
     [HttpPatch("{Id}/todoItems")]
+    [Authorize(Roles = "admin,user")]
     public async Task<ActionResult> UpdateTodoItems(
         [FromRoute()] AuthorIdDto idDto,
         [FromBody()] TodoItemIdDto[] todoItemsId
@@ -102,6 +107,7 @@ public abstract class AuthorsControllerBase : ControllerBase
     /// Create one Author
     /// </summary>
     [HttpPost()]
+    [Authorize(Roles = "admin,user")]
     public async Task<ActionResult<AuthorDto>> CreateAuthor(AuthorCreateInput input)
     {
         var author = await _service.CreateAuthor(input);
@@ -113,6 +119,7 @@ public abstract class AuthorsControllerBase : ControllerBase
     /// Delete one Author
     /// </summary>
     [HttpDelete("{Id}")]
+    [Authorize(Roles = "admin,user")]
     public async Task<ActionResult> DeleteAuthor([FromRoute()] AuthorIdDto idDto)
     {
         try
@@ -131,6 +138,7 @@ public abstract class AuthorsControllerBase : ControllerBase
     /// Find many Authors
     /// </summary>
     [HttpGet()]
+    [Authorize(Roles = "admin,user")]
     public async Task<ActionResult<List<AuthorDto>>> Authors([FromQuery()] AuthorFindMany filter)
     {
         return Ok(await _service.Authors(filter));
@@ -140,6 +148,7 @@ public abstract class AuthorsControllerBase : ControllerBase
     /// Get one Author
     /// </summary>
     [HttpGet("{Id}")]
+    [Authorize(Roles = "admin,user")]
     public async Task<ActionResult<AuthorDto>> Author([FromRoute()] AuthorIdDto idDto)
     {
         try
@@ -156,6 +165,7 @@ public abstract class AuthorsControllerBase : ControllerBase
     /// Update one Author
     /// </summary>
     [HttpPatch("{Id}")]
+    [Authorize(Roles = "admin,user")]
     public async Task<ActionResult> UpdateAuthor(
         [FromRoute()] AuthorIdDto idDto,
         [FromQuery()] AuthorUpdateInput authorUpdateDto
