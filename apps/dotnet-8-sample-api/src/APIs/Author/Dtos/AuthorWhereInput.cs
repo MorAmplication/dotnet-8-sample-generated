@@ -1,14 +1,14 @@
-namespace Author.APIs.Dtos;
+namespace Dotnet_8SampleApiDotNet.APIs.Dtos;
 
 public class AuthorWhereInput
 {
-    public string id { get; }
+    public string? Id { get; set; }
 
-    public DateTime createdAt { get; }
+    public DateTime? CreatedAt { get; set; }
 
-    public string updatedAt { get; }
+    public DateTime? UpdatedAt { get; set; }
 
-    public string? name { get; }
+    public string? Name { get; set; }
 
-    public List<TodoItemDto>? todoItems { get; }
+    public List<TodoItemIdDto>? TodoItems { get; set; }
 }

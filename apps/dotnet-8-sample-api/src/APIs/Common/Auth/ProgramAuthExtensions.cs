@@ -1,11 +1,10 @@
-using GraphQL;
+using Dotnet_8SampleApiDotNet.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.OpenApi.Models;
-using MyService.Infrastructure;
 using Swashbuckle.AspNetCore.Filters;
 
-namespace MyService.APIs;
+namespace Dotnet_8SampleApiDotNet.APIs;
 
 public static class ProgramAuthExtensions
 {
@@ -13,14 +12,14 @@ public static class ProgramAuthExtensions
     {
         services.AddAuthorization();
         services
-            .AddIdentityApiEndpoints<User>()
+            .AddIdentityApiEndpoints<IdentityUser>()
             .AddRoles<IdentityRole>()
-            .AddEntityFrameworkStores<MyServiceContext>();
+            .AddEntityFrameworkStores<Dotnet_8SampleApiDotNetDbContext>();
     }
 
     public static void UseApiAuthentication(this WebApplication app)
     {
-        app.MapGroup($"/auth").MapIdentityApi<User>();
+        app.MapGroup($"/auth").MapIdentityApi<IdentityUser>();
         app.UseAuthorization();
     }
 
@@ -31,13 +30,11 @@ public static class ProgramAuthExtensions
         options.TagActionsBy(api =>
         {
             string? tag = null;
-
             if (api.ActionDescriptor is ControllerActionDescriptor controllerActionDescriptor)
             {
                 tag = controllerActionDescriptor.ControllerName;
             }
-            tag = tag ?? api.RelativePath?.Split('/')?.FirstOrDefault()?.ToPascalCase();
-
+            tag = tag ?? api.RelativePath?.Split('/')?.FirstOrDefault();
             return new[] { tag };
         });
 

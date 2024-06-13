@@ -59,10 +59,6 @@
               "target": "Package",
               "version": "[8.0.3, )"
             },
-            "Microsoft.EntityFrameworkCore.InMemory": {
-              "target": "Package",
-              "version": "[8.0.2, )"
-            },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
               "version": "[8.0.5, )"
@@ -105,7 +101,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/root/.dotnet/sdk/8.0.300/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/root/.dotnet/sdk/8.0.302/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

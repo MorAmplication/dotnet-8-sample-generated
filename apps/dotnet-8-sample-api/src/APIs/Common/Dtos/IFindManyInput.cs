@@ -1,4 +1,4 @@
-namespace MyService.APIs.Common;
+namespace Dotnet_8SampleApiDotNet.APIs.Common;
 
 public interface IFindManyInput<M, W>
 {

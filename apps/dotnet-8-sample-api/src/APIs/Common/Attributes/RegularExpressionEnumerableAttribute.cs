@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 
-namespace MyService.APIs.Common.Attributes;
+namespace Dotnet_8SampleApiDotNet.APIs.Common.Attributes;
 
 public class RegularExpressionEnumerable : RegularExpressionAttribute
 {
