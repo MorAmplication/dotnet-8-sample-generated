@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Dotnet_8SampleApiDotNet.Infrastructure.Models;
 
 [Table("Users")]
-public class User : IdentityUser
+public class User
 {
     [Key()]
     [Required()]
@@ -14,7 +14,7 @@ public class User : IdentityUser
     public DateTime CreatedAt { get; set; }
 
     [Required()]
-    public string UpdatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
 
     [StringLength(256)]
     public string? FirstName { get; set; }

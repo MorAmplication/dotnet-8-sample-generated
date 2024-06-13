@@ -9,9 +9,9 @@ public static class ServiceCollectionExtensions
     /// </summary>
     public static void RegisterServices(this IServiceCollection services)
     {
-        services.AddScoped<ITodoItemsService, TodoItemsService>();
-        services.AddScoped<IWorkspacesService, WorkspacesService>();
         services.AddScoped<IAuthorsService, AuthorsService>();
+        services.AddScoped<ITodoItemsService, TodoItemsService>();
         services.AddScoped<IUsersService, UsersService>();
+        services.AddScoped<IWorkspacesService, WorkspacesService>();
     }
 }

@@ -12,7 +12,7 @@ public static class TodoItemsExtensions
             Id = model.Id,
             CreatedAt = model.CreatedAt,
             UpdatedAt = model.UpdatedAt,
-            Authors = model.Authors.Select(x => new AuthorIdDto { Id = x.Id }).ToList(),
+            Authors = model.Authors?.Select(x => new AuthorIdDto { Id = x.Id }).ToList(),
             Workspace = new WorkspaceIdDto { Id = model.WorkspaceId },
             IsCompleted = model.IsCompleted,
         };
@@ -29,7 +29,7 @@ public static class TodoItemsExtensions
         }
         if (updateDto.UpdatedAt != null)
         {
-            todoItem.UpdatedAt = updateDto.UpdatedAt;
+            todoItem.UpdatedAt = updateDto.UpdatedAt.Value;
         }
 
         return todoItem;

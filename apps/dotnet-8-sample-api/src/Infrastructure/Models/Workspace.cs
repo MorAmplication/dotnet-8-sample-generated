@@ -14,7 +14,7 @@ public class Workspace
     public DateTime CreatedAt { get; set; }
 
     [Required()]
-    public string UpdatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
 
     public List<TodoItem>? TodoItems { get; set; } = new List<TodoItem>();
 

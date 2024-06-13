@@ -4,7 +4,7 @@ public class WorkspaceDto : WorkspaceIdDto
 {
     public DateTime CreatedAt { get; set; }
 
-    public string UpdatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
 
     public List<TodoItemIdDto>? TodoItems { get; set; }
 

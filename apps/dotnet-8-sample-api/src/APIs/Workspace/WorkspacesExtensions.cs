@@ -12,7 +12,7 @@ public static class WorkspacesExtensions
             Id = model.Id,
             CreatedAt = model.CreatedAt,
             UpdatedAt = model.UpdatedAt,
-            TodoItems = model.TodoItems.Select(x => new TodoItemIdDto { Id = x.Id }).ToList(),
+            TodoItems = model.TodoItems?.Select(x => new TodoItemIdDto { Id = x.Id }).ToList(),
             Name = model.Name,
         };
     }
@@ -28,7 +28,7 @@ public static class WorkspacesExtensions
         }
         if (updateDto.UpdatedAt != null)
         {
-            workspace.UpdatedAt = updateDto.UpdatedAt;
+            workspace.UpdatedAt = updateDto.UpdatedAt.Value;
         }
 
         return workspace;

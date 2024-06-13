@@ -1,4 +1,5 @@
 using Dotnet_8SampleApiDotNet.Infrastructure;
+using Dotnet_8SampleApiDotNet.Infrastructure.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
@@ -19,32 +20,26 @@ public class SeedDevelopmentData
             .Select(x => x.Value.ToString())
             .ToArray();
 
-        var user = new User
+        var usernameValue = "test@email.com";
+        var passwordValue = "P@ssw0rd!";
+        var user = new IdentityUser
         {
-            Id = model.Id,
-            CreatedAt = model.CreatedAt,
-            UpdatedAt = model.UpdatedAt,
-            FirstName = model.FirstName,
-            LastName = model.LastName,
-            Username = model.Username,
-            Email = model.Email,
-            Password = model.Password,
-            Roles = model.Roles,
+            Email = usernameValue,
+            UserName = usernameValue,
+            NormalizedUserName = usernameValue.ToUpperInvariant(),
+            NormalizedEmail = usernameValue.ToUpperInvariant(),
         };
 
-        if (!context.Users.Any(u => u.UserName == user.UserName))
-        {
-            var password = new PasswordHasher<User>();
-            var hashed = password.HashPassword(user, "password");
-            user.PasswordHash = hashed;
-            var userStore = new UserStore<User>(context);
-            await userStore.CreateAsync(user);
-            var _roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+        var password = new PasswordHasher<IdentityUser>();
+        var hashed = password.HashPassword(user, passwordValue);
+        user.PasswordHash = hashed;
+        var userStore = new UserStore<IdentityUser>(context);
+        await userStore.CreateAsync(user);
+        var _roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-            foreach (var role in amplicationRoles)
-            {
-                await userStore.AddToRoleAsync(user, _roleManager.NormalizeKey(role));
-            }
+        foreach (var role in amplicationRoles)
+        {
+            await userStore.AddToRoleAsync(user, _roleManager.NormalizeKey(role));
         }
 
         await context.SaveChangesAsync();

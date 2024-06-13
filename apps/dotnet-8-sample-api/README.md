@@ -45,5 +45,5 @@ $ dotnet ef migrations add <new migration name>
 
 ## Apply database migration in non-local environment 
 
-Database modification in non-local enviroment would be applied throught different strategies depending on the requirements. 
+Database modification in non-local enviroment would be applied through different strategies depending on the requirements. 
 Follow Microsoft directions for your strategy: https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/applying

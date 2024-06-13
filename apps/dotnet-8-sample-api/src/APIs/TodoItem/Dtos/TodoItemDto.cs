@@ -4,7 +4,7 @@ public class TodoItemDto : TodoItemIdDto
 {
     public DateTime CreatedAt { get; set; }
 
-    public string UpdatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
 
     public List<AuthorIdDto>? Authors { get; set; }
 

@@ -6,7 +6,7 @@ public class AuthorWhereInput
 
     public DateTime? CreatedAt { get; set; }
 
-    public string? UpdatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
 
     public string? Name { get; set; }
 

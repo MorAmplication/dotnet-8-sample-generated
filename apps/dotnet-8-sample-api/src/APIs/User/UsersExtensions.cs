@@ -38,7 +38,7 @@ public static class UsersExtensions
         }
         if (updateDto.UpdatedAt != null)
         {
-            user.UpdatedAt = updateDto.UpdatedAt;
+            user.UpdatedAt = updateDto.UpdatedAt.Value;
         }
         if (updateDto.Username != null)
         {

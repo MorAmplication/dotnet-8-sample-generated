@@ -1,15 +1,22 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
 WORKDIR /App
 
-# Copy everything
-COPY . ./
+# Copy project files
+COPY *.csproj .config ./
+
 # Restore as distinct layers
 RUN dotnet restore
-RUN dotnet tool restore && dotnet csharpier .
+RUN dotnet tool restore 
+
+# Copy everything
+COPY . ./
+RUN dotnet csharpier .
+
+
 # Build and publish a release
 RUN dotnet publish -c Release -o out
 
-RUN dotnet tool restore
+RUN dotnet csharpier .
 RUN dotnet ef migrations bundle -o DbMigrationsBundle
 
 # Build runtime image

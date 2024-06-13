@@ -14,11 +14,11 @@ public class TodoItem
     public DateTime CreatedAt { get; set; }
 
     [Required()]
-    public string UpdatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
 
     public List<Author>? Authors { get; set; } = new List<Author>();
 
-    public string WorkspaceId { get; set; }
+    public string? WorkspaceId { get; set; }
 
     [ForeignKey(nameof(WorkspaceId))]
     public Workspace? Workspace { get; set; } = null;

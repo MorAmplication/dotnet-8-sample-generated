@@ -14,7 +14,7 @@ public class Author
     public DateTime CreatedAt { get; set; }
 
     [Required()]
-    public string UpdatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
 
     [StringLength(1000)]
     public string? Name { get; set; }

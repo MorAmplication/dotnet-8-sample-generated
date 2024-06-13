@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "Qz55639WrCE=",
+  "dgSpecHash": "QwpGALs0Pa0=",
   "success": true,
   "projectFilePath": "/efs/code/apps/dotnet-8-sample-api/src/dotnet-8-sample-api-dot-net.csproj",
   "expectedPackageFiles": [
@@ -24,7 +24,6 @@
     "/root/.nuget/packages/microsoft.entityframeworkcore.abstractions/8.0.5/microsoft.entityframeworkcore.abstractions.8.0.5.nupkg.sha512",
     "/root/.nuget/packages/microsoft.entityframeworkcore.analyzers/8.0.5/microsoft.entityframeworkcore.analyzers.8.0.5.nupkg.sha512",
     "/root/.nuget/packages/microsoft.entityframeworkcore.design/8.0.3/microsoft.entityframeworkcore.design.8.0.3.nupkg.sha512",
-    "/root/.nuget/packages/microsoft.entityframeworkcore.inmemory/8.0.2/microsoft.entityframeworkcore.inmemory.8.0.2.nupkg.sha512",
     "/root/.nuget/packages/microsoft.entityframeworkcore.relational/8.0.5/microsoft.entityframeworkcore.relational.8.0.5.nupkg.sha512",
     "/root/.nuget/packages/microsoft.entityframeworkcore.sqlserver/8.0.5/microsoft.entityframeworkcore.sqlserver.8.0.5.nupkg.sha512",
     "/root/.nuget/packages/microsoft.entityframeworkcore.tools/8.0.3/microsoft.entityframeworkcore.tools.8.0.3.nupkg.sha512",

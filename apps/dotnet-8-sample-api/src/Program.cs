@@ -25,11 +25,7 @@ builder.Services.AddCors(builder =>
         "MyCorsPolicy",
         policy =>
         {
-            policy
-                .AllowAnyHeader()
-                .AllowAnyMethod()
-                .WithOrigins(["localhost", "https://studio.apollographql.com"])
-                .AllowCredentials();
+            policy.AllowAnyHeader().AllowAnyMethod().WithOrigins(["localhost"]).AllowCredentials();
         }
     );
 });
@@ -63,6 +59,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.MapControllers();
+app.UseApiAuthentication();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;

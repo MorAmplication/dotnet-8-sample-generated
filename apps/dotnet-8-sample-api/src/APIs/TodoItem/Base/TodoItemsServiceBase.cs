@@ -34,6 +34,13 @@ public abstract class TodoItemsServiceBase : ITodoItemsService
         {
             todoItem.Id = createDto.Id;
         }
+        if (createDto.Workspace != null)
+        {
+            todoItem.Workspace = await _context
+                .Workspaces.Where(workspace => createDto.Workspace.Id == workspace.Id)
+                .FirstOrDefaultAsync();
+        }
+
         if (createDto.Authors != null)
         {
             todoItem.Authors = await _context

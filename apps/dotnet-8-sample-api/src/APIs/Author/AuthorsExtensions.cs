@@ -13,7 +13,7 @@ public static class AuthorsExtensions
             CreatedAt = model.CreatedAt,
             UpdatedAt = model.UpdatedAt,
             Name = model.Name,
-            TodoItems = model.TodoItems.Select(x => new TodoItemIdDto { Id = x.Id }).ToList(),
+            TodoItems = model.TodoItems?.Select(x => new TodoItemIdDto { Id = x.Id }).ToList(),
         };
     }
 
@@ -28,7 +28,7 @@ public static class AuthorsExtensions
         }
         if (updateDto.UpdatedAt != null)
         {
-            author.UpdatedAt = updateDto.UpdatedAt;
+            author.UpdatedAt = updateDto.UpdatedAt.Value;
         }
 
         return author;
