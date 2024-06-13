@@ -29,9 +29,6 @@ builder.Services.AddCors(builder =>
         }
     );
 });
-builder.Services.AddDbContext<Dotnet_8SampleApiDotNetDbContext>(opt =>
-    opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
-);
 builder.Services.AddApiAuthentication();
 builder.Services.AddDbContext<Dotnet_8SampleApiDotNetDbContext>(opt =>
     opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
